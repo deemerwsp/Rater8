@@ -2,18 +2,17 @@
 **Overview** <br>
 Ingest monthly rater8 data, update SQL database, provide various reports, handle errors for debugging. 
 
-**Program Workflow:**<br>
+**Program Process:** <br>
 1. Imports: python modules/libraries
-2. Get Dates
-3. Credentials: define various, sensitive login info variables 
+2. Get Dates: 
+3. Credentials: define variables for sensitive login info
 4. Functions: define functions
-5. Data Retrieval
-6. Data manipulation
+5. Data Retrieval: retrieve data from SQL database and rater8 API
+6. Data manipulation: format retrieved data to comply with SQL database tables 
 7. Upload Review Data to raw tables
-8. Create Reports
-9. Update dbo tables
-10. Upload Reports
-
+8. Create Reports: 
+9. Update dbo tables: execute SQL stored procedures to update dbo tables from uploaded raw tables
+10. Upload Reports: 
 
 **Deployment** <br>
 This program will be executed wihtin SQL Server Management Studio as a stored procedured. It requires the SSMS package for Machine Learning in order to run the SSMS stored procedure sp_execute_external_script. The stored procedure will require installing this program's required external libraries for python. This stored procedure will be given a time trigger in order to execute everyday at 11:00am. <br>
