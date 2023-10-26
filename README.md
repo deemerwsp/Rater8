@@ -2,6 +2,8 @@
 
 The Rater8 program is designed to ingest monthly data from the rater8 API, update the Azure SQL database, generate various reports, and handle errors for debugging purposes.
 
+The program is designed to refresh the month's data. To ensure all data for a month is captured, if the program execution data is the first of the month, the program will refesh last month's data in the SQL database with the entire month's data from the rater8 API. Three variables are defined at the start of the program to ensure this functionality: 'month', 'first_of_month', 'last_of_month'. These variables are defined based on the condition if the datetime is the first day of the month. All subsequent code uses these three variables. 
+
 ## Program Sections
 1. **Imports:** Import necessary Python modules and libraries.
 2. **Get Dates:** Retrieve current datetime for recording in the `program_report` and specify month range for data retrieval.  
@@ -14,21 +16,21 @@ The Rater8 program is designed to ingest monthly data from the rater8 API, updat
 9. **Update dbo Tables:** Execute SQL stored procedures to update dbo tables from the uploaded raw tables.
 10. **Upload Reports:** Upload generated reports to the SQL database.
 
+## Program Steps
 ### Step 1: Retrieve data from SQL Database
-
+Responses data for this month and all API Permissions data is retrieved from the SQL database and stored as Dataframes. <br>
+&emsp; DataFrames <br>
+&emsp; Responses: prov_reviews_in_database, loc_reviews_in_database <br>
+&emsp; Permissions: prov_perms_in_db, loc_perms_in_dab <br>
 ### Step 2: Retrieve rater8 API Permissions
-
+Make API GET request to fetch API Permissions for Locations and Providers and create corresponding DataFrames. 
 ### Step 3: Retrieve rater8 Responses
-
 ### Step 4: Manipulate Data 
-
 ### Step 5: Upload Responses Data to raw Tables
-
 ### Step 6: Upload API Permissions Data
-
 ### Step 7: Create Reports
-
 ### Step 8: Update dbo Tables 
+### Step 9: Upload Reports 
 
 
 ## Program Interfaces
@@ -53,6 +55,37 @@ Given this scenario, data was uploaded to the raw schema, and Location response 
 The program is crafted to function seamlessly as a stored procedure within SQL Server Management Studio (SSMS). Successful execution relies on the SSMS package for Machine Learning, particularly the SSMS stored procedure sp_execute_external_script. It's imperative to have the requisite external Python libraries installed within the stored procedure to ensure smooth functionality.
 
 Scheduled for daily execution at 11:00 AM, the program is optimized to align with the operational hours of the rater8 API. This timing mitigates any potential disruptions, accounting for the API's downtime from 9:00 PM to 10:00 AM. By scheduling the program to run at 11:00 AM, it guarantees a reliable HTTP interaction with the rater8 API for seamless data retrieval and processing.
+
+# Program Report 
+|Column|Description|
+|:--|:--|
+|Id|The 'Id' field serves as an auto-incremented primary key, overseen by SQL Server. Given the additive nature of reports, there is no necessity to reseed the primary key before uploading the python program's data to the SQL table.|
+|InsertDate|Date of program execution.|
+|Launched|Timestamp the program launched execution.|
+|DBLocRespRetr|Execution time for fetching month's Location Responses from SQL Database and storing as DataFrame. |
+|DBProvRespRetr|Execution time for fetching month's Provider Responses from SQL Database and storing as DataFrame.|
+|DBProvPermsRetr|Execution time for fetching all Provider API permissions from SQL Database and storing as DataFrame.|
+|DBLocPermsRetr|Execution time for fetching all Location API permissions from SQL Database and storing as DataFrame.|
+|APIPermsRetr|Execution time for fetching all API permissions from rater8 API and storing as DataFrame.|
+|APILocRetr|Execution time for fetching month's Location Responses from rater8 API, aggregating all together as DataFrame.|
+|APIProvRetr|Execution time for fetching month's Responses Responses from rater8 API, aggregating all together as DataFrame.||
+|LocRespUpload|Execution time for uploading month's Location respones to SQL raw table.|
+|ProvRespUpload|Execution time for uploading month's Provider respones to SQL raw table.|
+|LocPermsUpload|Execution time for uploading Location API permissions to SQL rater8 table.|
+|ProvPermsUpload|Execution time for uploading Provider API permissions to SQL rater8 table.|
+|LocResp|Execution time to calulate counts of new responses per Location and create report DataFrame.|
+|ProvResp|Execution time to calulate counts of new responses per Location per source company and create report DataFrame.|
+|LocPerms|Execution time to identify Locations that are newly subscribed or unsubscribed to rater8 and create report DataFrame.|
+|ProvPerms|Execution time to identify Providers that are newly subscribed or unsubscribed to rater8 and create report DataFrame.|
+|LocRespUpdate|Execution time to upload month's Location response data to SQL raw table. |
+|ProvRespUpdate|Execution time to upload month's Provider response data to SQL raw table. |
+|QuestionsUpdate|Execution time to update rater8.QuestionResponses SQL table. |
+|PermsReportUpload|Execution time to upload report of Locations and Providers that are newly subscribed or unsubscribed to rater8.|
+|LocReportUpload|Execution time to update rater8.LocResponses with data from raw.Rater8LocResponses$.|
+|ProvLocReportUpload|Execution time to update rater8.ProvLocResponses with data from raw.Rater8ProvResponses$.|
+|Terminated|Timestamp the program encountered and error and was terminated. |
+|Program||
+|Completed||
 
 # Python 
 ### Imports
