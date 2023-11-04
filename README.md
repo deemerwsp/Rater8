@@ -23,7 +23,12 @@ Responses data for this month and all API Permissions data is retrieved from the
 &emsp; Responses: prov_reviews_in_database, loc_reviews_in_database <br>
 &emsp; Permissions: prov_perms_in_db, loc_perms_in_dab <br>
 ### Step 2: Retrieve rater8 API Permissions
-Make API GET request to fetch API Permissions for Locations and Providers and create corresponding DataFrames. 
+Make API GET request to fetch API Permissions for Locations and Providers and create corresponding DataFrames. The 'clientCodes' are of the datatype list or an array. Since Providers always have a single clientCode, these values are converted to datatype string. Locations' 'clientCodes' are left as an array.
+&emsp; DataFrames
+&emsp; 
+&emsp; 
+&emsp; 
+&emsp; 
 ### Step 3: Retrieve rater8 Responses
 ### Step 4: Manipulate Data 
 ### Step 5: Upload Responses Data to raw Tables
